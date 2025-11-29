@@ -1,3 +1,5 @@
+# Makefile pour MiniOS (Compatible Windows/MinGW)
+
 SHELL = cmd.exe
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c11 -g -O2
@@ -10,13 +12,16 @@ TRACEDIR = traces
 
 SOURCES = $(wildcard $(SRCDIR)/*.c)
 OBJECTS = $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
-TARGET = $(BINDIR)/minios.exe # Renommé pour l'exécutable Windows
+TARGET = $(BINDIR)/minios.exe # Exécutable pour Windows
 
 .PHONY: all clean directories run visualize html-report visualize-all help
 
+# ----------------------------------------------------------------------
+# Règle par défaut (Compilation complète)
+# ----------------------------------------------------------------------
 all: directories $(TARGET)
 
-# Règle pour créer les répertoires. Utilise des commandes Windows.
+# Règle pour créer les répertoires. Utilise 'mkdir' de Windows.
 directories:
 	@echo "📂 Creation des repertoires..."
 	-mkdir $(OBJDIR)
@@ -30,7 +35,9 @@ $(TARGET): $(OBJECTS)
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Règle pour nettoyer (Compatible Windows/MinGW)
+# ----------------------------------------------------------------------
+# Nettoyage (Compatible Windows/MinGW via SHELL = cmd.exe)
+# ----------------------------------------------------------------------
 clean:
 	@echo "🧹 Nettoyage des fichiers generes..."
 	-DEL /Q $(TRACEDIR)\*.txt $(TRACEDIR)\*.png
@@ -39,7 +46,10 @@ clean:
 	-RMDIR /S /Q $(BINDIR)
 	-RMDIR /S /Q $(TRACEDIR)
 
-# Lancement du programme (Utilise la cible Windows)
+# ----------------------------------------------------------------------
+# Commandes Utilitaires
+# ----------------------------------------------------------------------
+# Lancement du programme
 run: $(TARGET)
 	./$(TARGET)
 
@@ -51,8 +61,8 @@ html-report:
 
 visualize-all: html-report
 	@echo "✅ Rapports generes:"
-	@echo " 	 - traces/minios_report.html (ouvrir dans le navigateur)"
-	@echo " 	 - traces/minios_report.json"
+	@echo " 	- traces/minios_report.html (ouvrir dans le navigateur)"
+	@echo " 	- traces/minios_report.json"
 
 help:
 	@echo "📋 Commandes disponibles:"
