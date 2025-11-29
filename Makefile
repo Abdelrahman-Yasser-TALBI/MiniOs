@@ -1,3 +1,4 @@
+SHELL = cmd.exe
 CC = gcc
 CFLAGS = -Wall -Wextra -std=c11 -g -O2
 LDFLAGS = -lpthread -lm
