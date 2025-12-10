@@ -1,0 +1,117 @@
+# ----------------------------------------------------------------------
+
+# Configuration Windows
+
+# ----------------------------------------------------------------------
+
+SHELL = cmd.exe
+
+
+
+# ----------------------------------------------------------------------
+
+# Variables
+
+# ----------------------------------------------------------------------
+
+CC = gcc
+
+CFLAGS = -Wall -Wextra -std=c99 -I.
+
+TARGET = parking.exe
+
+SOURCES = main.c gestion_voitures.c menu_logique.c statistiques.c
+
+OBJECTS = $(SOURCES:.c=.o)
+
+
+
+# ----------------------------------------------------------------------
+
+# Règle par défaut (Compilation complète)
+
+# ----------------------------------------------------------------------
+
+all: $(TARGET)
+
+
+
+# Compilation de l'exécutable
+
+$(TARGET): $(OBJECTS)
+
+    $(CC) $(CFLAGS) -o $(TARGET) $(OBJECTS)
+
+    @echo [OK] Compilation reussie ! Lancez avec : make run
+
+
+
+# Compilation des fichiers objets (.c -> .o)
+
+%.o: %.c
+
+    $(CC) $(CFLAGS) -c $< -o $@
+
+
+
+# ----------------------------------------------------------------------
+
+# Commandes d'exécution
+
+# ----------------------------------------------------------------------
+
+# Permet d'utiliser "make run" ou "make test"
+
+run: test
+
+
+
+test: all
+
+    @echo [LANCEMENT] Demarrage du programme...
+
+    .\$(TARGET)
+
+
+
+# ----------------------------------------------------------------------
+
+# Nettoyage
+
+# ----------------------------------------------------------------------
+
+clean:
+
+    @echo [NETTOYAGE] Suppression des fichiers...
+
+    -del /Q /F $(OBJECTS) $(TARGET)
+
+    -del /Q /F traces\*.txt traces\*.png
+
+    -rmdir /S /Q obj
+
+    -rmdir /S /Q bin
+
+
+
+# ----------------------------------------------------------------------
+
+# Utilitaires
+
+# ----------------------------------------------------------------------
+
+rebuild: clean all
+
+
+
+help:
+
+    @echo Commandes disponibles:
+
+    @echo    make         - Compile le programme
+
+    @echo    make run     - Compile et lance le programme
+
+    @echo    make clean   - Supprime les fichiers compiles
+
+    @echo    make rebuild - Recommence tout a zero
